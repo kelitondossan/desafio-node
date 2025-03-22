@@ -1,0 +1,149 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+  "title": "Desafio Técnico - Node.js",
+  "version": "1.0.0",
+  "description": "API de exemplo para pedidos e pagamentos"
+  },
+  "paths": {
+  "/orders": {
+  "post": {
+  "security": [{ "bearerAuth": [] }],
+  "summary": "Criar um novo pedido",
+  "description": "Cria um pedido com base em items e método de pagamento.",
+  "operationId": "createOrder",
+  "requestBody": {
+  "required": true,
+  "content": {
+  "application/json": {
+  "schema": {
+  "$ref": "#/components/schemas/CreateOrderDTO"
+  }
+  }
+  }
+  },
+  "responses": {
+  "201": {
+  "description": "Pedido criado com sucesso"
+  },
+  "401": {
+  "description": "Não autorizado (token JWT ausente ou inválido)"
+  }
+  }
+  },
+  "get": {
+  "security": [{ "bearerAuth": [] }],
+  "summary": "Listar todos os pedidos",
+  "operationId": "listAllOrders",
+  "responses": {
+  "200": {
+  "description": "Lista de pedidos retornada com sucesso"
+  },
+  "401": {
+  "description": "Não autorizado (token JWT ausente ou inválido)"
+  }
+  }
+  }
+  },
+  "/orders/{id}": {
+  "get": {
+  "security": [{ "bearerAuth": [] }],
+  "summary": "Obter detalhes de um pedido",
+  "operationId": "getOrderById",
+  "parameters": [
+  {
+  "name": "id",
+  "in": "path",
+  "required": true,
+  "description": "ID do pedido",
+  "schema": {
+  "type": "string"
+  }
+  }
+  ],
+  "responses": {
+  "200": {
+  "description": "Detalhes do pedido retornados com sucesso"
+  },
+  "401": {
+  "description": "Não autorizado (token JWT ausente ou inválido)"
+  },
+  "404": {
+  "description": "Pedido não encontrado"
+  }
+  }
+  }
+  },
+  "/webhook/payment": {
+  "post": {
+  "summary": "Simular webhook de pagamento",
+  "operationId": "webhookPayment",
+  "requestBody": {
+  "required": true,
+  "content": {
+  "application/json": {
+  "schema": {
+  "$ref": "#/components/schemas/WebhookPaymentDTO"
+  }
+  }
+  }
+  },
+  "responses": {
+  "200": {
+  "description": "Status de pagamento atualizado com sucesso"
+  }
+  }
+  }
+  }
+  },
+  "components": {
+  "securitySchemes": {
+  "bearerAuth": {
+  "type": "http",
+  "scheme": "bearer",
+  "bearerFormat": "JWT"
+  }
+  },
+  "schemas": {
+  "CreateOrderDTO": {
+  "type": "object",
+  "properties": {
+  "customer": {
+  "type": "string"
+  },
+  "items": {
+  "type": "array",
+  "items": {
+  "$ref": "#/components/schemas/Item"
+  }
+  },
+  "payment_method": {
+  "type": "string",
+  "enum": ["cartao", "boleto", "pix"]
+  }
+  }
+  },
+  "Item": {
+  "type": "object",
+  "properties": {
+  "product": { "type": "string" },
+  "quantity": { "type": "number" },
+  "price": { "type": "number" }
+  }
+  },
+  "WebhookPaymentDTO": {
+  "type": "object",
+  "properties": {
+  "order_id": {
+  "type": "string"
+  },
+  "status": {
+  "type": "string",
+  "enum": ["approved", "rejected"]
+  }
+  }
+  }
+  }
+  },
+  "security": [{ "bearerAuth": [] }]
+  }
