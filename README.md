@@ -28,8 +28,9 @@ docker-compose up -d
 \`\`\`bash
 npm run migrate
 \`\`\`
-
-5. Execute em modo desenvolvimento:
+ caso a migrate falhe com dize no banco do docker façça isso:
+cat drizzle/migrations/*.sql-("aqui voce coloa o nome do  arquivo sql com .sql que seria a extensão" | docker exec -i postgres-db psql -U postgres -d desafio_node
+6. Execute em modo desenvolvimento:
 \`\`\`bash
  npx ts-node src/server.ts
  \`\`\`
